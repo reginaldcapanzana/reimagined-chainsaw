@@ -1,0 +1,54 @@
+<ul>
+  @if ((localSite$ | async) as local) {
+    <li>
+      <strong>{{ local.name }}</strong> (local)
+      @if (local.environments.size > 0) {
+        <ul>
+          @for (envEntry of local.environments | keyvalue; track envEntry.key) {
+            <li>
+              {{ envEntry.value.name }}
+              @if (envEntry.value.clusters.size > 0) {
+                <ul>
+                  @for (clusterEntry of envEntry.value.clusters | keyvalue; track clusterEntry.key) {
+                    <li>
+                      {{ clusterEntry.value.name }}
+                      @if (clusterEntry.value.syncClusters?.size) {
+                        <ul>
+                          @for (sc of clusterEntry.value.syncClusters | keyvalue; track sc.key) {
+                            <li>🔁 {{ sc.value.name }}</li>
+                          }
+                        </ul>
+                      }
+                    </li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </li>
+  }
+
+  @for (siteEntry of (remoteSites$ | async) | keyvalue; track siteEntry.key) {
+    <li>
+      <strong>{{ siteEntry.value.name }}</strong> (remote)
+      @if (siteEntry.value.environments.size > 0) {
+        <ul>
+          @for (envEntry of siteEntry.value.environments | keyvalue; track envEntry.key) {
+            <li>
+              {{ envEntry.value.name }}
+              @if (envEntry.value.clusters.size > 0) {
+                <ul>
+                  @for (clusterEntry of envEntry.value.clusters | keyvalue; track clusterEntry.key) {
+                    <li>{{ clusterEntry.value.name }}</li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </li>
+  }
+</ul>
