@@ -1,0 +1,24 @@
+<div style="display:grid; gap:1rem; grid-template-columns: 1fr 2fr;">
+  <section>
+    <h2>Add New</h2>
+    <label>
+      Mode:
+      <select [(ngModel)]="mode">
+        <option value="site">Site</option>
+        <option value="environment">Environment</option>
+        <option value="cluster">Cluster</option>
+        <option value="syncCluster">Sync Cluster</option>
+      </select>
+    </label>
+
+    <app-add-form [mode]="mode"></app-add-form>
+  </section>
+
+  <section>
+    <h2>Sites Hierarchy</h2>
+    <app-sites-display
+      [localSite$]="localSite$"
+      [remoteSites$]="remoteSites$"
+    ></app-sites-display>
+  </section>
+</div>
