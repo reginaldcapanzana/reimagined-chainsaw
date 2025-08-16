@@ -1,0 +1,105 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  @if (mode === 'site') {
+    <div>
+      <label>Site Name</label>
+      <input formControlName="name" placeholder="Enter site name" />
+    </div>
+  }
+
+  @if (mode === 'environment') {
+    <div>
+      <label>Select Site</label>
+      <select formControlName="siteId">
+        <option [ngValue]="null">-- Select a site first --</option>
+        @for (site of (sites$ | async) ?? []; track site.id) {
+          <option [ngValue]="site.id">{{ site.name }}</option>
+        }
+      </select>
+
+      <label>Environment Type</label>
+      <select formControlName="environmentTypeId">
+        <option [ngValue]="null">-- Select environment type --</option>
+        @for (t of (envTypes$ | async) ?? []; track t.id) {
+          <option [ngValue]="t.id">{{ t.name }}</option>
+        }
+      </select>
+
+      <label>Environment Name</label>
+      <input formControlName="name" placeholder="Enter environment name" />
+    </div>
+  }
+
+  @if (mode === 'cluster') {
+    <div>
+      <label>Select Site</label>
+      <select formControlName="siteId">
+        <option [ngValue]="null">-- Select a site first --</option>
+        @for (site of (sites$ | async) ?? []; track site.id) {
+          <option [ngValue]="site.id">{{ site.name }}</option>
+        }
+      </select>
+
+      <label>Select Environment</label>
+      <select formControlName="envId" [disabled]="!environments.length">
+        <option [ngValue]="null">
+          @if (!form.get('siteId')?.value) { -- Select site first -- }
+          @else { -- Select an environment -- }
+        </option>
+        @for (env of environments; track env.id) {
+          <option [ngValue]="env.id">{{ env.name }}</option>
+        }
+      </select>
+
+      <label>Cluster Type</label>
+      <select formControlName="clusterTypeId">
+        <option [ngValue]="null">-- Select cluster type --</option>
+        @for (t of (clusterTypes$ | async) ?? []; track t.id) {
+          <option [ngValue]="t.id">{{ t.name }}</option>
+        }
+      </select>
+
+      <label>Cluster Name</label>
+      <input formControlName="name" placeholder="Enter cluster name" />
+    </div>
+  }
+
+  @if (mode === 'syncCluster') {
+    <div>
+      <label>Select Local Site</label>
+      <select formControlName="siteId">
+        <option [ngValue]="null">-- Select the Local site --</option>
+        @for (site of (localSites$ | async) ?? []; track site.id) {
+          <option [ngValue]="site.id">{{ site.name }}</option>
+        }
+      </select>
+
+      <label>Select Environment</label>
+      <select formControlName="envId" [disabled]="!environments.length">
+        <option [ngValue]="null">
+          @if (!form.get('siteId')?.value) { -- Select site first -- }
+          @else { -- Select an environment -- }
+        </option>
+        @for (env of environments; track env.id) {
+          <option [ngValue]="env.id">{{ env.name }}</option>
+        }
+      </select>
+
+      <label>Select Cluster</label>
+      <select formControlName="clusterId" [disabled]="!clustersForEnv.length">
+        <option [ngValue]="null">
+          @if (!form.get('envId')?.value) { -- Select environment first -- }
+          @else { -- Select a cluster -- }
+        </option>
+        @for (c of clustersForEnv; track c.id) {
+          <option [ngValue]="c.id">{{ c.name }}</option>
+        }
+      </select>
+
+      <label>Sync Cluster Name</label>
+      <input formControlName="name" placeholder="Enter sync cluster name" />
+    </div>
+  }
+
+  <button type="submit" [disabled]="form.invalid">Add</button>
+</form>
