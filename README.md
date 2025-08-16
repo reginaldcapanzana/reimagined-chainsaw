@@ -1,4 +1,6 @@
-Router hits your functional resolver → calls state.loadAll() and awaits the first hydrated state (either a local site or any remote sites).
+Data Flow:
+
+Router hits the functional resolver → calls state.loadAll() and awaits the first hydrated state (either a local site or any remote sites).
 
 SitesStateService fires parallel GETs (sites, envs, clusters, syncClusters, types). When they return, it uses SyncService to aggregate flat lists into:
 
